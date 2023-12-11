@@ -1,12 +1,44 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './Home.css';
-import {Button} from 'antd';
+import {Card, Image} from 'antd';
+
+
+const RoomCover = () => {
+    return (
+        <div className="room-cover">
+            <Image
+                width={100}
+                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+            />
+        </div>
+    )
+}
+
+const MeetingRoom = () => {
+    const [seats] = useState(0)
+
+    const displaySeatText = (seatsCount) => {
+        if (seatsCount <= 1) return seatsCount + " Seat";
+        else return seatsCount + " Seats";
+    }
+
+    return (
+        <div>
+            <Card className="meeting-room"
+                  title={displaySeatText(seats)}
+                  bordered={true}>
+                <RoomCover/>
+            </Card>
+        </div>
+    )
+}
 
 const MeetingRooms = () => {
     return (
         <div className="meeting-rooms" aria-label="Meeting Room List`">
-            room list
-            <Button type="primary">PRESS ME</Button>
+            <MeetingRoom/>
+            <MeetingRoom/>
+            <MeetingRoom/>
         </div>
     )
 };

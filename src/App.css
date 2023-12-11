@@ -1,7 +1,7 @@
 :root {
   /* Color */
   --bg-color: #f9f9f9;
-  --card-bg-color: #ffffff;
+  --content-bg-color: #ffffff;
   --text-color: #191919;
   --border-color: #e8e8e8;
   --primary-color: #0057ff;
@@ -24,6 +24,6 @@
   --box-shadow: 0 1px 2px rgba(0, 0, 0, .16);
 }
 
-.App {
-  background: var(--bg-color);
+html, body {
+  background-color: var(--bg-color);
 }

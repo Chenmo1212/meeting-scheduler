@@ -1,11 +1,22 @@
 .home {
-  min-height: calc(100vh - 60px);
+  min-height: 800px;
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 60px auto;
 }
 
 .content {
-  padding-top: 50px;
+  padding: 50px 30px;
   display: flex;
   gap: 10px;
+  background-color: var(--content-bg-color);
+  box-shadow: var(--box-shadow);
+  border: var(--solid-border);
+}
+
+.content .meeting-rooms {
+  width: 70%;
+}
+
+.meeting-rooms .meeting-room {
+  margin-bottom: 10px;
 }
