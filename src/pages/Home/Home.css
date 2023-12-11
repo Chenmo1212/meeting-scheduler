@@ -1,0 +1,11 @@
+.home {
+  min-height: calc(100vh - 60px);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.content {
+  padding-top: 50px;
+  display: flex;
+  gap: 10px;
+}
