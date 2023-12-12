@@ -25,7 +25,6 @@ const Timeline = () => {
                     className={`time-slot${isFirstSlot ? ' first-slot' : ''}${isSelected ? ' selected' : ''}`}
                     onClick={() => handleSlotClick(i)}
                 >
-                    {isSelected && <div className="selection-highlight"/>}
                     {i === 0 && <div className="hour-label">{label}</div>}
                     {i % 2 === 0 && i !== 0 && <div className="hour-label">{label}</div>}
                 </div>

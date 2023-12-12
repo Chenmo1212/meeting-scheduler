@@ -11,6 +11,7 @@
   height: 40%;
   margin: 10px 0;
   border-right: var(--solid-border);
+  border-bottom: var(--solid-border);
   box-sizing: border-box;
   position: relative;
   cursor: pointer;
@@ -27,15 +28,5 @@
 }
 
 .selected {
-  background-color: #e0e0e0;
-}
-
-.selection-highlight {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 50%;
-  width: 100%;
-  background-color: #b3d4fc;
-  z-index: -1;
+  background-color: var(--selecting-color);
 }
