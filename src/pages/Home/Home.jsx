@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import './Home.css';
 import {Card, Image} from 'antd';
+import Timeline from "../../components/Timeline/Timeline"
 
 
 const RoomCover = () => {
@@ -27,7 +28,10 @@ const MeetingRoom = () => {
             <Card className="meeting-room"
                   title={displaySeatText(seats)}
                   bordered={true}>
-                <RoomCover/>
+                <div className="room-content">
+                    <RoomCover/>
+                    <Timeline />
+                </div>
             </Card>
         </div>
     )

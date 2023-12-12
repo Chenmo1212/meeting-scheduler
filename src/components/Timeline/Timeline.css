@@ -1,0 +1,41 @@
+/* Timeline.css */
+.timeline {
+  display: flex;
+  width: 85%;
+  margin-left: 20px;
+  flex-wrap: wrap;
+}
+
+.time-slot {
+  width: calc(100% / 24); /* Reduced width to fit 12 hours in one row */
+  height: 40%;
+  margin: 10px 0;
+  border-right: var(--solid-border);
+  box-sizing: border-box;
+  position: relative;
+  cursor: pointer;
+}
+
+.time-slot.first-slot {
+  border-left: var(--solid-border);
+}
+
+.hour-label {
+  position: absolute;
+  top: -20px;
+  transform: translateX(-50%);
+}
+
+.selected {
+  background-color: #e0e0e0;
+}
+
+.selection-highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 50%;
+  width: 100%;
+  background-color: #b3d4fc;
+  z-index: -1;
+}

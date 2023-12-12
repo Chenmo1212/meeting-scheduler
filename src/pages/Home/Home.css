@@ -1,6 +1,6 @@
 .home {
   min-height: 800px;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 60px auto;
 }
 
@@ -19,4 +19,9 @@
 
 .meeting-rooms .meeting-room {
   margin-bottom: 10px;
+}
+
+.meeting-room .room-content {
+  display: flex;
+  gap: 10px;
 }
