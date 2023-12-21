@@ -18,3 +18,18 @@
   justify-content: center;
   color: #fff;
 }
+
+.room .main {
+  display: flex;
+}
+
+.main .unit {
+  float: left;
+  height: 100%;
+  min-width: 20px;
+  border-right: 1px solid #ccc;
+}
+
+.main .unit:hover {
+  background-color: #f0f0f0;
+}
