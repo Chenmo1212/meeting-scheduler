@@ -42,3 +42,14 @@
   cursor: pointer;
   z-index: 10;
 }
+
+.resizable-e {
+  cursor: e-resize;
+  width: 10px;
+  right: -5px;
+  top: 0;
+  height: 100%;
+  z-index: 90;
+  position: absolute;
+  display: block;
+}

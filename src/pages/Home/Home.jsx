@@ -56,12 +56,21 @@ const MeetingDetails = () => {
 };
 
 const Home = () => {
+  const rooms = [1, 2, 3]
+  const units = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  const [events, setEvents] = useState([{start: 2, end: 3}]);
+
   return (
     <div className="home" aria-label="Meeting Room Booking Page">
       <div className="content">
         {/*<MeetingRooms/>*/}
         {/*<MeetingDetails/>*/}
-        <Scheduler/>
+        <Scheduler
+          rooms={rooms}
+          units={units}
+          events={events}
+          setEvents={setEvents}
+        />
       </div>
     </div>
   );

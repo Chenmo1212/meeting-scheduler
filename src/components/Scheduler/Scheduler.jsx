@@ -1,29 +1,52 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './Scheduler.css';
 import Unit from "./Unit";
 import Event from "./Event";
 
 
-const onUnitMouseDown = (roomIdx, unitIdx) => {
-  console.log(`[onUnitMouseDown]: ${roomIdx}, ${unitIdx}`)
-}
 const onUnitMouseEnter = (roomIdx, unitIdx) => {
-  console.log(`[onUnitMouseEnter]: ${roomIdx}, ${unitIdx}`)
+  // console.log(`[onUnitMouseEnter]: ${roomIdx}, ${unitIdx}`)
 }
 const onUnitMouseUp = (roomIdx, unitIdx) => {
-  console.log(`[onUnitMouseUp]: ${roomIdx}, ${unitIdx}`)
+  // console.log(`[onUnitMouseUp]: ${roomIdx}, ${unitIdx}`)
 }
 const onUnitDragEnter = (roomIdx, unitIdx) => {
-  console.log(`[onUnitDragEnter]: ${roomIdx}, ${unitIdx}`)
+  // console.log(`[onUnitDragEnter]: ${roomIdx}, ${unitIdx}`)
 }
 
 
-const Scheduler = () => {
-  const rooms = [1, 2, 3];
-  const units = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  const events = [{
-    width: '10px'
-  }]
+const Scheduler = ({rooms, units, events, setEvents}) => {
+  const [isSelecting, setSelecting] = useState(false);
+  const [selectingRoomIdx, setSelectingRoomIdx] = useState(-1);
+
+  const onUnitMouseDown = (roomIdx, unitIdx) => {
+    console.log(`[onUnitMouseDown]: ${roomIdx}, ${unitIdx}`);
+    setSelecting(true);
+    setSelectingRoomIdx(roomIdx);
+
+    setEvents([{
+      start: unitIdx,
+      end: unitIdx + 1
+    }])
+
+//       let addMinutes = (keyIndex - 1) * this.settingData.unit;
+//       let addMinutes2 = keyIndex * this.settingData.unit;
+//       let newStartDateObj = this.addMinutes(
+//         new Date(this.settingData.startDate),
+//         addMinutes
+//       );
+//       let newEndDateObj = this.addMinutes(
+//         new Date(this.settingData.startDate),
+//         addMinutes2
+//       );
+//       this.scheduleData[rowIndex].schedule.push({
+//         text: "New",
+//         start: this.datetimeFormatter(newStartDateObj),
+//         end: this.datetimeFormatter(newEndDateObj)
+//       });
+//       this.isSelectingIndex =
+//         this.scheduleData[this.isSelectingRowIndex].schedule.length - 1;
+  }
 
   return (
     <div className="schedule">
@@ -45,7 +68,9 @@ const Scheduler = () => {
             {events.map((event, eventIdx) => (
               <Event
                 key={eventIdx}
-                width={100 / units.length + '%'}
+                start={event.start}
+                end={event.end}
+                units={units}
               />
             ))}
           </div>

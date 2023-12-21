@@ -1,12 +1,20 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 const Event = ({
-                 width = '100%',
-                 height = '100%'
+                 height = '100%',
+                 start = 0,
+                 end = 1,
+                 units
                }) => {
   const [opacity, setOpacity] = useState(1);
+  const [width, setWidth] = useState('0');
   const [left, setLeftOffset] = useState('0px');
   const [isShow, setVisibility] = useState(false);
+
+  useEffect(() => {
+    setWidth((end - start) * 100 / units.length + "%");
+    setLeftOffset(start * 100 / units.length + "%");
+  }, [start, end]);
 
   const onDragStart = () => {
     console.log("[onDragStart]");
