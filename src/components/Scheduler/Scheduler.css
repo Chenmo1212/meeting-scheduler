@@ -21,6 +21,7 @@
 
 .room .main {
   display: flex;
+  position: relative;
 }
 
 .main .unit {
@@ -32,4 +33,12 @@
 
 .main .unit:hover {
   background-color: #f0f0f0;
+}
+
+.main .event {
+  position: absolute;
+  color: #fff;
+  background: #e78507;
+  cursor: pointer;
+  z-index: 10;
 }

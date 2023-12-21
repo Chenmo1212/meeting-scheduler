@@ -1,6 +1,7 @@
 import React from 'react';
 import './Scheduler.css';
 import Unit from "./Unit";
+import Event from "./Event";
 
 
 const onUnitMouseDown = (roomIdx, unitIdx) => {
@@ -20,6 +21,9 @@ const onUnitDragEnter = (roomIdx, unitIdx) => {
 const Scheduler = () => {
   const rooms = [1, 2, 3];
   const units = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  const events = [{
+    width: '10px'
+  }]
 
   return (
     <div className="schedule">
@@ -35,6 +39,13 @@ const Scheduler = () => {
                 onUnitMouseEnter={() => onUnitMouseEnter(roomIdx, unitIdx)}
                 onUnitMouseUp={() => onUnitMouseUp(roomIdx, unitIdx)}
                 onUnitDragEnter={() => onUnitDragEnter(roomIdx, unitIdx)}
+              />
+            ))}
+
+            {events.map((event, eventIdx) => (
+              <Event
+                key={eventIdx}
+                width={100 / units.length + '%'}
               />
             ))}
           </div>
