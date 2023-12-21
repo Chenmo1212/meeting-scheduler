@@ -1,0 +1,20 @@
+.schedule {
+  width: 100%;
+}
+
+.room {
+  display: flex;
+  gap: 20px;
+  height: 200px;
+  width: 100%;
+  border-bottom: 1px solid #000;
+}
+
+.room .left {
+  background-color: #557ba5;
+  width: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
