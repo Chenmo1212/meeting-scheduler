@@ -1,27 +1,27 @@
 import React, {useEffect, useState} from 'react';
 
 const Meeting = ({
-                 height = '100%',
-                 units,
-                 meeting,
-                 isShow,
-                 isEdit,
-                 isMove,
-                 unitWidth,
-                 currRoomId,
-                 currUnitIdx,
-                 editInitEndIdx,
-                 setIsEdit,
-                 setIsMove,
-                 setEditInitStartIdx,
-                 setEditInitEndIdx,
-                 updateMeeting
-               }) => {
+                   height = '100%',
+                   units,
+                   meeting,
+                   isShow,
+                   isEdit,
+                   isMove,
+                   unitWidth,
+                   currRoomId,
+                   currUnitIdx,
+                   editInitEndIdx,
+                   setIsEdit,
+                   setIsMove,
+                   setCurrRoomId,
+                   setEditInitStartIdx,
+                   setEditInitEndIdx,
+                   updateMeeting
+                 }) => {
   const [opacity, setOpacity] = useState(1);
   const [width, setWidth] = useState('0');
   const [left, setLeftOffset] = useState('0px');
   const [startMouseX, setStartMouseX] = useState(null);
-  const [startRoomId, setStartRoomId] = useState(null);
   const {start, end} = meeting;
 
   useEffect(() => {
@@ -39,26 +39,27 @@ const Meeting = ({
       setIsMove(true);
       setOpacity(0.5);
       setStartMouseX(e.clientX);
-      setStartRoomId(currRoomId);
     }
   }
 
+  const calcDragUnitAmount = (clientX) => {
+    let moveXPx = clientX - startMouseX;
+    let unitAmount = parseInt(moveXPx / unitWidth + "");
+    let modXPx = parseInt(moveXPx % unitWidth + "");
+    if (Math.abs(modXPx) >= unitWidth / 2) {
+      unitAmount += moveXPx < 0 ? -1 : 1;
+    }
+    return unitAmount;
+  }
+
   const onDragEnd = (e) => {
-    console.log("[onDragEnd]");
-
+    console.log("[onDragEnd]", currRoomId);
     if (isMove && !isEdit) {
-      let moveXPx = e.clientX - startMouseX;
-      let unitAmount = Math.floor(moveXPx / unitWidth);
-      let halfWidth = unitWidth / 2;
-      let modXPx = Math.floor(moveXPx % unitWidth);
-      if (moveXPx < 0 && Math.abs(modXPx) >= halfWidth) {
-        unitAmount--;
-      }
-
+      let unitAmount = calcDragUnitAmount(e.clientX);
       if (start + unitAmount >= 0 && end + unitAmount <= units.length) {
         updateMeeting({
           isMove: true,
-          roomId: startRoomId,
+          roomId: meeting.roomId,
           newRoomId: currRoomId,
           start: start + unitAmount,
           end: end + unitAmount
@@ -70,20 +71,20 @@ const Meeting = ({
   }
 
   const onDragOver = (e) => {
-    console.log("[onDragOver]");
+    console.log("[onDragOver]", currRoomId);
     if (!isEdit) return;
 
     if (e) {
       let movePx = e.clientX - startMouseX;
       updateMeeting({
-        roomId: currRoomId,
+        id: meeting.id,
         start: start,
         end: editInitEndIdx + Math.floor(movePx / unitWidth) + 1
       });
     } else {
       if (currUnitIdx > start && !e)
         updateMeeting({
-          roomId: currRoomId,
+          id: meeting.id,
           start: start,
           end: currUnitIdx
         });
@@ -92,10 +93,12 @@ const Meeting = ({
 
   const onEventMouseDown = () => {
     console.log("[onEventMouseDown]");
+    setCurrRoomId(meeting.roomId);
   }
 
   const onEventMouseUp = () => {
     console.log("[onEventMouseUp]");
+    setCurrRoomId(-1);
   }
 
   const onEventClick = () => {

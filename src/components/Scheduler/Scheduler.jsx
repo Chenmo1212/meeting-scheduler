@@ -63,7 +63,7 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
           roomId: meeting.newRoomId
         }
       } else {
-        return e.roomId === meeting.roomId ? meeting : e;
+        return e.id === meeting.id ? meeting : e;
       }
     });
     setMeetings(updatedMeetings);
@@ -102,6 +102,7 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
                 updateMeeting={updateMeeting}
                 setIsEdit={setIsEdit}
                 setIsMove={setIsMove}
+                setCurrRoomId={setCurrRoomId}
                 setEditInitStartIdx={setEditInitStartIdx}
                 setEditInitEndIdx={setEditInitEndIdx}
               />
