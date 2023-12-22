@@ -56,9 +56,14 @@ const MeetingDetails = () => {
 };
 
 const Home = () => {
-  const rooms = [1, 2, 3]
+  const rooms = [{id: 1}, {id: 2}, {id: 3}]
   const units = Array.from({length: 24}, (_, index) => index + 1);
-  const [events, setEvents] = useState([{start: 2, end: 7}]);
+  const [meetings, setMeetings] = useState([{
+    roomId: 1, start: 2, end: 7,
+  }]);
+  useEffect(() => {
+    console.log('meetings: ', meetings);
+  }, [meetings])
 
   return (
     <div className="home" aria-label="Meeting Room Booking Page">
@@ -68,8 +73,8 @@ const Home = () => {
         <Scheduler
           rooms={rooms}
           units={units}
-          events={events}
-          setEvents={setEvents}
+          meetings={meetings}
+          setMeetings={setMeetings}
         />
       </div>
     </div>

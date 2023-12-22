@@ -1,27 +1,28 @@
 import React, {useEffect, useState} from 'react';
 
-const Event = ({
+const Meeting = ({
                  height = '100%',
-                 start = 0,
-                 end = 1,
                  units,
+                 meeting,
+                 isShow,
                  isEdit,
                  isMove,
                  unitWidth,
-                 currRoomIdx,
+                 currRoomId,
                  currUnitIdx,
                  editInitEndIdx,
                  setIsEdit,
                  setIsMove,
                  setEditInitStartIdx,
                  setEditInitEndIdx,
-                 setEvents
+                 updateMeeting
                }) => {
   const [opacity, setOpacity] = useState(1);
   const [width, setWidth] = useState('0');
   const [left, setLeftOffset] = useState('0px');
   const [startMouseX, setStartMouseX] = useState(null);
-  const [isShow, setVisibility] = useState(false);
+  const [startRoomId, setStartRoomId] = useState(null);
+  const {start, end} = meeting;
 
   useEffect(() => {
     setWidth((end - start) * unitWidth + "px");
@@ -38,6 +39,7 @@ const Event = ({
       setIsMove(true);
       setOpacity(0.5);
       setStartMouseX(e.clientX);
+      setStartRoomId(currRoomId);
     }
   }
 
@@ -54,10 +56,13 @@ const Event = ({
       }
 
       if (start + unitAmount >= 0 && end + unitAmount <= units.length) {
-        setEvents([{
+        updateMeeting({
+          isMove: true,
+          roomId: startRoomId,
+          newRoomId: currRoomId,
           start: start + unitAmount,
           end: end + unitAmount
-        }]);
+        });
       }
       setIsMove(false);
     }
@@ -70,9 +75,18 @@ const Event = ({
 
     if (e) {
       let movePx = e.clientX - startMouseX;
-      setEvents([{start: start, end: editInitEndIdx + Math.floor(movePx / unitWidth) + 1}]);
+      updateMeeting({
+        roomId: currRoomId,
+        start: start,
+        end: editInitEndIdx + Math.floor(movePx / unitWidth) + 1
+      });
     } else {
-      if (currUnitIdx > start && !e) setEvents([{start: start, end: currUnitIdx}]);
+      if (currUnitIdx > start && !e)
+        updateMeeting({
+          roomId: currRoomId,
+          start: start,
+          end: currUnitIdx
+        });
     }
   }
 
@@ -111,7 +125,7 @@ const Event = ({
     <div
       className={'event'}
       style={{
-        display: isShow ? 'none' : 'inline-block',
+        display: isShow ? 'inline-block' : 'none',
         opacity: opacity,
         width: width,
         height: height,
@@ -135,4 +149,4 @@ const Event = ({
   );
 };
 
-export default Event;
+export default Meeting;

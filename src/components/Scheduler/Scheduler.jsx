@@ -1,17 +1,17 @@
 import React, {useEffect, useRef, useState} from 'react';
 import './Scheduler.css';
 import Unit from "./Unit";
-import Event from "./Event";
+import Meeting from "./Meeting";
 
 
 const onUnitMouseEnter = (roomIdx, unitIdx) => {
   // console.log(`[onUnitMouseEnter]: ${roomIdx}, ${unitIdx}`)
 }
 
-const Scheduler = ({rooms, units, events, setEvents}) => {
+const Scheduler = ({rooms, units, meetings, setMeetings}) => {
   const [isSelecting, setSelecting] = useState(false);
-  const [selectingRoomIdx, setSelectingRoomIdx] = useState(-1);
-  const [currRoomIdx, setCurrRoomIdx] = useState(-1);
+  const [selectingRoomIdx, setSelectingRoomId] = useState(-1);
+  const [currRoomId, setCurrRoomId] = useState(-1);
   const [currUnitIdx, setCurrUnitIdx] = useState(-1);
 
   const [isEdit, setIsEdit] = useState(false);
@@ -30,15 +30,16 @@ const Scheduler = ({rooms, units, events, setEvents}) => {
     }
   }, [units, unitsRef]);
 
-  const onUnitMouseDown = (roomIdx, unitIdx) => {
-    console.log(`[onUnitMouseDown]: ${roomIdx}, ${unitIdx}`);
+  const onUnitMouseDown = (room, unitIdx) => {
+    console.log(`[onUnitMouseDown]: ${room.id}, ${unitIdx}`);
     setSelecting(true);
-    setSelectingRoomIdx(roomIdx);
+    setSelectingRoomId(room.id);
 
-    setEvents([{
+    setMeetings([...meetings, {
+      roomId: room.id,
       start: unitIdx,
       end: unitIdx + 1
-    }])
+    }]);
   }
 
   const onUnitMouseUp = (roomIdx, unitIdx) => {
@@ -46,10 +47,26 @@ const Scheduler = ({rooms, units, events, setEvents}) => {
     setSelecting(false);
   }
 
-  const onUnitDragEnter = (roomIdx, unitIdx) => {
-    console.log(`[onUnitDragEnter]: ${roomIdx}, ${unitIdx}`);
-    setCurrRoomIdx(roomIdx);
+  const onUnitDragEnter = (room, unitIdx) => {
+    console.log(`[onUnitDragEnter]: ${room.id}, ${unitIdx}`);
+    setCurrRoomId(room.id);
     setCurrUnitIdx(unitIdx);
+  }
+
+  const updateMeeting = (meeting) => {
+    const updatedMeetings = meetings.map(e => {
+      if (meeting.isMove) {
+        return {
+          ...e,
+          start: meeting.start,
+          end: meeting.end,
+          roomId: meeting.newRoomId
+        }
+      } else {
+        return e.roomId === meeting.roomId ? meeting : e;
+      }
+    });
+    setMeetings(updatedMeetings);
   }
 
   return (
@@ -62,27 +79,27 @@ const Scheduler = ({rooms, units, events, setEvents}) => {
               <Unit
                 key={unitIdx}
                 width={unitWidth}
-                onUnitMouseDown={() => onUnitMouseDown(roomIdx, unitIdx)}
-                onUnitMouseEnter={() => onUnitMouseEnter(roomIdx, unitIdx)}
-                onUnitMouseUp={() => onUnitMouseUp(roomIdx, unitIdx)}
-                onUnitDragEnter={() => onUnitDragEnter(roomIdx, unitIdx)}
+                onUnitMouseDown={() => onUnitMouseDown(room, unitIdx)}
+                onUnitMouseEnter={() => onUnitMouseEnter(room, unitIdx)}
+                onUnitMouseUp={() => onUnitMouseUp(room, unitIdx)}
+                onUnitDragEnter={() => onUnitDragEnter(room, unitIdx)}
               />
             ))}
 
-            {events.map((event, eventIdx) => (
-              <Event
-                key={eventIdx}
-                start={event.start}
-                end={event.end}
+            {meetings.map((meeting, meetingIdx) => (
+              <Meeting
+                key={meetingIdx}
                 units={units}
+                meeting={meeting}
+                isShow={meeting.roomId === room.id}
                 isEdit={isEdit}
                 isMove={isMove}
                 editInitStartIdx={editInitStartIdx}
                 editInitEndIdx={editInitEndIdx}
                 unitWidth={unitWidth}
-                currRoomIdx={currRoomIdx}
+                currRoomId={currRoomId}
                 currUnitIdx={currUnitIdx}
-                setEvents={setEvents}
+                updateMeeting={updateMeeting}
                 setIsEdit={setIsEdit}
                 setIsMove={setIsMove}
                 setEditInitStartIdx={setEditInitStartIdx}
