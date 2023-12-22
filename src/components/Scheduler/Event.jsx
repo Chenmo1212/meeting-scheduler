@@ -4,13 +4,15 @@ const Event = ({
                  height = '100%',
                  start = 0,
                  end = 1,
-                 isEditEvent,
+                 units,
+                 isEdit,
+                 isMove,
                  unitWidth,
                  currRoomIdx,
                  currUnitIdx,
-                 editInitStartIdx,
                  editInitEndIdx,
-                 setEditEvent,
+                 setIsEdit,
+                 setIsMove,
                  setEditInitStartIdx,
                  setEditInitEndIdx,
                  setEvents
@@ -18,7 +20,7 @@ const Event = ({
   const [opacity, setOpacity] = useState(1);
   const [width, setWidth] = useState('0');
   const [left, setLeftOffset] = useState('0px');
-  const [editStartMouseX, setEditStartMouseX] = useState(null);
+  const [startMouseX, setStartMouseX] = useState(null);
   const [isShow, setVisibility] = useState(false);
 
   useEffect(() => {
@@ -27,23 +29,47 @@ const Event = ({
   }, [start, end, unitWidth]);
 
   useEffect(() => {
-    if (isEditEvent) onDragOver();
+    if (isEdit) onDragOver();
   }, [currUnitIdx])
 
-  const onDragStart = () => {
+  const onDragStart = (e) => {
     console.log("[onDragStart]");
+    if (!isEdit && e) {
+      setIsMove(true);
+      setOpacity(0.5);
+      setStartMouseX(e.clientX);
+    }
   }
 
-  const onDragEnd = () => {
+  const onDragEnd = (e) => {
     console.log("[onDragEnd]");
+
+    if (isMove && !isEdit) {
+      let moveXPx = e.clientX - startMouseX;
+      let unitAmount = Math.floor(moveXPx / unitWidth);
+      let halfWidth = unitWidth / 2;
+      let modXPx = Math.floor(moveXPx % unitWidth);
+      if (moveXPx < 0 && Math.abs(modXPx) >= halfWidth) {
+        unitAmount--;
+      }
+
+      if (start + unitAmount >= 0 && end + unitAmount <= units.length) {
+        setEvents([{
+          start: start + unitAmount,
+          end: end + unitAmount
+        }]);
+      }
+      setIsMove(false);
+    }
+    setOpacity(1);
   }
 
   const onDragOver = (e) => {
     console.log("[onDragOver]");
-    if (!isEditEvent) return;
+    if (!isEdit) return;
 
     if (e) {
-      let movePx = e.clientX - editStartMouseX;
+      let movePx = e.clientX - startMouseX;
       setEvents([{start: start, end: editInitEndIdx + Math.floor(movePx / unitWidth) + 1}]);
     } else {
       if (currUnitIdx > start && !e) setEvents([{start: start, end: currUnitIdx}]);
@@ -64,20 +90,20 @@ const Event = ({
 
   const editEventStart = (e) => {
     console.log("[editEventStart]", e.clientX);
-    setEditStartMouseX(e.clientX);
+    setStartMouseX(e.clientX);
     setEditInitStartIdx(start);
     setEditInitEndIdx(end);
-    setEditEvent(true);
+    setIsEdit(true);
     setOpacity(0.5);
   }
 
   const editEventEnd = () => {
     console.log("[editEventEnd]");
 
-    setEditStartMouseX(null);
+    setStartMouseX(null);
     setEditInitStartIdx(-1);
     setEditInitEndIdx(-1);
-    setEditEvent(false);
+    setIsEdit(false);
     setOpacity(1);
   }
 

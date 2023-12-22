@@ -7,10 +7,6 @@ import Event from "./Event";
 const onUnitMouseEnter = (roomIdx, unitIdx) => {
   // console.log(`[onUnitMouseEnter]: ${roomIdx}, ${unitIdx}`)
 }
-const onUnitMouseUp = (roomIdx, unitIdx) => {
-  // console.log(`[onUnitMouseUp]: ${roomIdx}, ${unitIdx}`)
-}
-
 
 const Scheduler = ({rooms, units, events, setEvents}) => {
   const [isSelecting, setSelecting] = useState(false);
@@ -18,9 +14,12 @@ const Scheduler = ({rooms, units, events, setEvents}) => {
   const [currRoomIdx, setCurrRoomIdx] = useState(-1);
   const [currUnitIdx, setCurrUnitIdx] = useState(-1);
 
-  const [isEditEvent, setEditEvent] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [editInitStartIdx, setEditInitStartIdx] = useState(-1);
   const [editInitEndIdx, setEditInitEndIdx] = useState(-1);
+
+  const [isMove, setIsMove] = useState(false);
+
   const [unitWidth, setUnitWidth] = useState(0);
 
   const unitsRef = useRef(null);
@@ -40,6 +39,11 @@ const Scheduler = ({rooms, units, events, setEvents}) => {
       start: unitIdx,
       end: unitIdx + 1
     }])
+  }
+
+  const onUnitMouseUp = (roomIdx, unitIdx) => {
+    console.log(`[onUnitMouseUp]: ${roomIdx}, ${unitIdx}`);
+    setSelecting(false);
   }
 
   const onUnitDragEnter = (roomIdx, unitIdx) => {
@@ -70,14 +74,17 @@ const Scheduler = ({rooms, units, events, setEvents}) => {
                 key={eventIdx}
                 start={event.start}
                 end={event.end}
-                isEditEvent={isEditEvent}
+                units={units}
+                isEdit={isEdit}
+                isMove={isMove}
                 editInitStartIdx={editInitStartIdx}
                 editInitEndIdx={editInitEndIdx}
                 unitWidth={unitWidth}
                 currRoomIdx={currRoomIdx}
                 currUnitIdx={currUnitIdx}
                 setEvents={setEvents}
-                setEditEvent={setEditEvent}
+                setIsEdit={setIsEdit}
+                setIsMove={setIsMove}
                 setEditInitStartIdx={setEditInitStartIdx}
                 setEditInitEndIdx={setEditInitEndIdx}
               />
