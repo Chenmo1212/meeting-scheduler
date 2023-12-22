@@ -5,12 +5,12 @@ const Unit = ({
                 onUnitMouseDown,
                 onUnitMouseEnter,
                 onUnitMouseUp,
-                onUnitDragEnter
+                onUnitDragEnter,
               }) => {
   return (
     <div
       className="unit"
-      style={{width: width}}
+      style={{width: width + "%"}}
       onMouseDown={onUnitMouseDown}
       onMouseEnter={onUnitMouseEnter}
       onMouseUp={onUnitMouseUp}

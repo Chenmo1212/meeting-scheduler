@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import './Scheduler.css';
 import Unit from "./Unit";
 import Event from "./Event";
@@ -10,14 +10,26 @@ const onUnitMouseEnter = (roomIdx, unitIdx) => {
 const onUnitMouseUp = (roomIdx, unitIdx) => {
   // console.log(`[onUnitMouseUp]: ${roomIdx}, ${unitIdx}`)
 }
-const onUnitDragEnter = (roomIdx, unitIdx) => {
-  // console.log(`[onUnitDragEnter]: ${roomIdx}, ${unitIdx}`)
-}
 
 
 const Scheduler = ({rooms, units, events, setEvents}) => {
   const [isSelecting, setSelecting] = useState(false);
   const [selectingRoomIdx, setSelectingRoomIdx] = useState(-1);
+  const [currRoomIdx, setCurrRoomIdx] = useState(-1);
+  const [currUnitIdx, setCurrUnitIdx] = useState(-1);
+
+  const [isEditEvent, setEditEvent] = useState(false);
+  const [editInitStartIdx, setEditInitStartIdx] = useState(-1);
+  const [editInitEndIdx, setEditInitEndIdx] = useState(-1);
+  const [unitWidth, setUnitWidth] = useState(0);
+
+  const unitsRef = useRef(null);
+
+  useEffect(() => {
+    if (unitsRef.current) {
+      setUnitWidth(unitsRef.current.getBoundingClientRect().width / units.length);
+    }
+  }, [units, unitsRef]);
 
   const onUnitMouseDown = (roomIdx, unitIdx) => {
     console.log(`[onUnitMouseDown]: ${roomIdx}, ${unitIdx}`);
@@ -28,24 +40,12 @@ const Scheduler = ({rooms, units, events, setEvents}) => {
       start: unitIdx,
       end: unitIdx + 1
     }])
+  }
 
-//       let addMinutes = (keyIndex - 1) * this.settingData.unit;
-//       let addMinutes2 = keyIndex * this.settingData.unit;
-//       let newStartDateObj = this.addMinutes(
-//         new Date(this.settingData.startDate),
-//         addMinutes
-//       );
-//       let newEndDateObj = this.addMinutes(
-//         new Date(this.settingData.startDate),
-//         addMinutes2
-//       );
-//       this.scheduleData[rowIndex].schedule.push({
-//         text: "New",
-//         start: this.datetimeFormatter(newStartDateObj),
-//         end: this.datetimeFormatter(newEndDateObj)
-//       });
-//       this.isSelectingIndex =
-//         this.scheduleData[this.isSelectingRowIndex].schedule.length - 1;
+  const onUnitDragEnter = (roomIdx, unitIdx) => {
+    console.log(`[onUnitDragEnter]: ${roomIdx}, ${unitIdx}`);
+    setCurrRoomIdx(roomIdx);
+    setCurrUnitIdx(unitIdx);
   }
 
   return (
@@ -53,11 +53,11 @@ const Scheduler = ({rooms, units, events, setEvents}) => {
       {rooms.map((room, roomIdx) => (
         <div className="room" key={roomIdx}>
           <div className="left">{`Room ${roomIdx + 1}`}</div>
-          <div className="main">
+          <div className="main" ref={unitsRef}>
             {units.map((unit, unitIdx) => (
               <Unit
                 key={unitIdx}
-                width={100 / units.length + '%'}
+                width={unitWidth}
                 onUnitMouseDown={() => onUnitMouseDown(roomIdx, unitIdx)}
                 onUnitMouseEnter={() => onUnitMouseEnter(roomIdx, unitIdx)}
                 onUnitMouseUp={() => onUnitMouseUp(roomIdx, unitIdx)}
@@ -70,7 +70,16 @@ const Scheduler = ({rooms, units, events, setEvents}) => {
                 key={eventIdx}
                 start={event.start}
                 end={event.end}
-                units={units}
+                isEditEvent={isEditEvent}
+                editInitStartIdx={editInitStartIdx}
+                editInitEndIdx={editInitEndIdx}
+                unitWidth={unitWidth}
+                currRoomIdx={currRoomIdx}
+                currUnitIdx={currUnitIdx}
+                setEvents={setEvents}
+                setEditEvent={setEditEvent}
+                setEditInitStartIdx={setEditInitStartIdx}
+                setEditInitEndIdx={setEditInitEndIdx}
               />
             ))}
           </div>

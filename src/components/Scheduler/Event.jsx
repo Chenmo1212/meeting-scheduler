@@ -4,17 +4,31 @@ const Event = ({
                  height = '100%',
                  start = 0,
                  end = 1,
-                 units
+                 isEditEvent,
+                 unitWidth,
+                 currRoomIdx,
+                 currUnitIdx,
+                 editInitStartIdx,
+                 editInitEndIdx,
+                 setEditEvent,
+                 setEditInitStartIdx,
+                 setEditInitEndIdx,
+                 setEvents
                }) => {
   const [opacity, setOpacity] = useState(1);
   const [width, setWidth] = useState('0');
   const [left, setLeftOffset] = useState('0px');
+  const [editStartMouseX, setEditStartMouseX] = useState(null);
   const [isShow, setVisibility] = useState(false);
 
   useEffect(() => {
-    setWidth((end - start) * 100 / units.length + "%");
-    setLeftOffset(start * 100 / units.length + "%");
-  }, [start, end]);
+    setWidth((end - start) * unitWidth + "px");
+    setLeftOffset(start * unitWidth + "px");
+  }, [start, end, unitWidth]);
+
+  useEffect(() => {
+    if (isEditEvent) onDragOver();
+  }, [currUnitIdx])
 
   const onDragStart = () => {
     console.log("[onDragStart]");
@@ -24,28 +38,47 @@ const Event = ({
     console.log("[onDragEnd]");
   }
 
-  const onDragOver = () => {
+  const onDragOver = (e) => {
     console.log("[onDragOver]");
+    if (!isEditEvent) return;
+
+    if (e) {
+      let movePx = e.clientX - editStartMouseX;
+      setEvents([{start: start, end: editInitEndIdx + Math.floor(movePx / unitWidth) + 1}]);
+    } else {
+      if (currUnitIdx > start && !e) setEvents([{start: start, end: currUnitIdx}]);
+    }
   }
 
-  const onUnitMouseDown = () => {
-    console.log("[onUnitMouseDown]");
+  const onEventMouseDown = () => {
+    console.log("[onEventMouseDown]");
   }
 
-  const onUnitMouseUp = () => {
-    console.log("[onUnitMouseUp]");
+  const onEventMouseUp = () => {
+    console.log("[onEventMouseUp]");
   }
 
   const onEventClick = () => {
     console.log("[onEventClick]");
   }
 
-  const editEventStart = () => {
-    console.log("[editEventStart]");
+  const editEventStart = (e) => {
+    console.log("[editEventStart]", e.clientX);
+    setEditStartMouseX(e.clientX);
+    setEditInitStartIdx(start);
+    setEditInitEndIdx(end);
+    setEditEvent(true);
+    setOpacity(0.5);
   }
 
   const editEventEnd = () => {
     console.log("[editEventEnd]");
+
+    setEditStartMouseX(null);
+    setEditInitStartIdx(-1);
+    setEditInitEndIdx(-1);
+    setEditEvent(false);
+    setOpacity(1);
   }
 
   return (
@@ -62,8 +95,8 @@ const Event = ({
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       onDragOver={onDragOver}
-      onMouseDown={onUnitMouseDown}
-      onMouseUp={onUnitMouseUp}
+      onMouseDown={onEventMouseDown}
+      onMouseUp={onEventMouseUp}
       onClick={onEventClick}
     >
       <div
