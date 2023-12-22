@@ -55,16 +55,7 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
 
   const updateMeeting = (meeting) => {
     const updatedMeetings = meetings.map(e => {
-      if (meeting.isMove) {
-        return {
-          ...e,
-          start: meeting.start,
-          end: meeting.end,
-          roomId: meeting.newRoomId
-        }
-      } else {
-        return e.id === meeting.id ? meeting : e;
-      }
+      return e.id === meeting.id ? {...e, ...meeting} : e;
     });
     setMeetings(updatedMeetings);
   }

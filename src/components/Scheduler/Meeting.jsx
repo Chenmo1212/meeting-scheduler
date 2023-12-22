@@ -58,9 +58,8 @@ const Meeting = ({
       let unitAmount = calcDragUnitAmount(e.clientX);
       if (start + unitAmount >= 0 && end + unitAmount <= units.length) {
         updateMeeting({
-          isMove: true,
-          roomId: meeting.roomId,
-          newRoomId: currRoomId,
+          id: meeting.id,
+          roomId: currRoomId,
           start: start + unitAmount,
           end: end + unitAmount
         });
@@ -71,24 +70,17 @@ const Meeting = ({
   }
 
   const onDragOver = (e) => {
-    console.log("[onDragOver]", currRoomId);
+    console.log("[onDragOver]");
     if (!isEdit) return;
 
+    let newEnd = currUnitIdx;
     if (e) {
       let movePx = e.clientX - startMouseX;
-      updateMeeting({
-        id: meeting.id,
-        start: start,
-        end: editInitEndIdx + Math.floor(movePx / unitWidth) + 1
-      });
-    } else {
-      if (currUnitIdx > start && !e)
-        updateMeeting({
-          id: meeting.id,
-          start: start,
-          end: currUnitIdx
-        });
+      newEnd = editInitEndIdx + parseInt(movePx / unitWidth + "") + 1;
     }
+    newEnd = newEnd > units.length ? units.length : newEnd;
+    newEnd = newEnd <= meeting.start + 1 ? meeting.start + 1 : newEnd;
+    updateMeeting({id: meeting.id, end: newEnd});
   }
 
   const onEventMouseDown = () => {
