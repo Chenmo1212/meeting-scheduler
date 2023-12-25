@@ -44,8 +44,8 @@
 }
 
 .resizable-e {
-  cursor: grab;
-  width: 5px;
+  cursor: e-resize;
+  width: 10px;
   right: -5px;
   top: 0;
   height: 100%;
