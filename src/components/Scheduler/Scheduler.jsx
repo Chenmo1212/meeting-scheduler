@@ -83,6 +83,7 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
                 units={units}
                 meeting={meeting}
                 isShow={meeting.roomId === room.id}
+                isSelecting={isSelecting}
                 isEdit={isEdit}
                 isMove={isMove}
                 editInitStartIdx={editInitStartIdx}

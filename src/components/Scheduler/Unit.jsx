@@ -7,6 +7,11 @@ const Unit = ({
                 onUnitMouseUp,
                 onUnitDragEnter,
               }) => {
+
+  const cancelDefault = (e) => {
+    e.preventDefault();
+  }
+
   return (
     <div
       className="unit"
@@ -15,6 +20,7 @@ const Unit = ({
       onMouseEnter={onUnitMouseEnter}
       onMouseUp={onUnitMouseUp}
       onDragEnter={onUnitDragEnter}
+      onDragOver={cancelDefault}
     />
   );
 };

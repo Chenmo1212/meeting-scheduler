@@ -4,6 +4,7 @@ const Meeting = ({
                    height = '100%',
                    units,
                    meeting,
+                   isSelecting,
                    isShow,
                    isEdit,
                    isMove,
@@ -98,6 +99,12 @@ const Meeting = ({
   }
 
   const editEventStart = (e) => {
+    if (isSelecting) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+
     console.log("[editEventStart]", e.clientX);
     setStartMouseX(e.clientX);
     setEditInitStartIdx(start);
@@ -118,7 +125,7 @@ const Meeting = ({
 
   return (
     <div
-      className={'event'}
+      className={'meeting'}
       style={{
         display: isShow ? 'inline-block' : 'none',
         opacity: opacity,

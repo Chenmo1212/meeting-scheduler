@@ -35,7 +35,7 @@
   background-color: #f0f0f0;
 }
 
-.main .event {
+.main .meeting {
   position: absolute;
   color: #fff;
   background: #e78507;
@@ -44,7 +44,7 @@
 }
 
 .resizable-e {
-  cursor: e-resize;
+  cursor: grab;
   width: 5px;
   right: -5px;
   top: 0;
