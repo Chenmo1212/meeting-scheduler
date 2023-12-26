@@ -48,7 +48,6 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
   }
 
   const onUnitDragEnter = (room, unitIdx) => {
-    console.log(`[onUnitDragEnter]: ${room.id}, ${unitIdx}`);
     setCurrRoomId(room.id);
     setCurrUnitIdx(unitIdx);
   }
@@ -60,6 +59,32 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
     });
     setMeetings(updatedMeetings);
   }
+
+  const getEditingTimeRange = (meeting) => {
+    const filteredMeetings = meetings.filter(e => e.roomId === meeting.roomId);
+    const sortedMeetings = filteredMeetings.slice().sort((a, b) => a.start - b.start);
+    const index = sortedMeetings.findIndex(m => m.id === meeting.id);
+    if (index === -1) return {start: 0, end: units.length - 1}
+
+    const previousMeeting = sortedMeetings[index - 1];
+    const nextMeeting = sortedMeetings[index + 1];
+
+    const start = previousMeeting ? previousMeeting.end : 0;
+    const end = nextMeeting ? nextMeeting.start : units.length - 1;
+
+    return {start, end};
+  }
+
+  const isOverlapWithExistingMeetings = (newMeeting) => {
+    const {id, roomId, start, end} = newMeeting;
+    const filteredMeetings = meetings.filter(meeting => meeting.roomId === roomId && meeting.id !== id);
+    for (const meeting of filteredMeetings) {
+      if (start < meeting.end && end > meeting.start) {
+        return true;
+      }
+    }
+    return false;
+  };
 
   return (
     <div className="schedule">
@@ -101,6 +126,8 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
                 currRoomId={currRoomId}
                 currUnitIdx={currUnitIdx}
                 updateMeeting={updateMeeting}
+                isOverlapWithExistingMeetings={(newMeeting) => isOverlapWithExistingMeetings(newMeeting)}
+                getEditingTimeRange={() => getEditingTimeRange(meeting)}
                 setEditMode={setEditMode}
                 setIsMove={setIsMove}
                 setCurrRoomId={setCurrRoomId}

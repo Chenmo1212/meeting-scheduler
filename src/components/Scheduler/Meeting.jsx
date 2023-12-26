@@ -12,6 +12,8 @@ const Meeting = ({
                    currUnitIdx,
                    editInitStartIdx,
                    editInitEndIdx,
+                   isOverlapWithExistingMeetings,
+                   getEditingTimeRange,
                    setEditMode,
                    setIsMove,
                    setCurrRoomId,
@@ -48,14 +50,15 @@ const Meeting = ({
     if (!isActive) return;
     if (isMove && !editMode) {
       const unitAmount = calcDragUnitAmount(e.clientX);
-      if (meeting.start + unitAmount >= 0 && meeting.end + unitAmount <= units.length) {
-        updateMeeting({
-          id: meeting.id,
-          roomId: currRoomId,
-          start: meeting.start + unitAmount,
-          end: meeting.end + unitAmount,
-        });
+      const updatedMeeting = {
+        id: meeting.id,
+        roomId: currRoomId,
+        start: meeting.start + unitAmount,
+        end: meeting.end + unitAmount
       }
+
+      const isOverlap = isOverlapWithExistingMeetings(updatedMeeting)
+      if (!isOverlap) updateMeeting(updatedMeeting);
       setIsMove(false);
     }
     setOpacity(1);
@@ -95,7 +98,8 @@ const Meeting = ({
       newStart = editInitStartIdx + parseInt((movePx / unitWidth).toString()) - 1;
     }
 
-    newStart = newStart < 0 ? 0 : newStart;
+    let range = getEditingTimeRange();
+    newStart = newStart < range.start ? range.start : newStart;
     newStart = newStart > meeting.end - 1 ? meeting.end - 1 : newStart;
     return newStart;
   };
@@ -107,7 +111,8 @@ const Meeting = ({
       newEnd = editInitEndIdx + parseInt((movePx / unitWidth).toString());
     }
 
-    newEnd = newEnd > units.length ? units.length : newEnd;
+    let range = getEditingTimeRange();
+    newEnd = newEnd > range.end ? range.end : newEnd;
     newEnd = newEnd <= meeting.start + 1 ? meeting.start + 1 : newEnd;
     return newEnd;
   };
@@ -166,7 +171,7 @@ const Meeting = ({
         left: left, opacity: opacity,
         height: '100%'
       }}
-      draggable={true}
+      draggable={isActive}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       onDragOver={(e) => onDragOver(e)}

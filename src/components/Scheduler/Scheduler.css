@@ -17,6 +17,7 @@
   width: 100%;
   text-align: center;
   font-size: 14px;
+  margin-bottom: 10px;
 }
 
 .labels div {
@@ -62,6 +63,7 @@
   width: 1px;
   background: var(--border-color);
 }
+
 .main .unit:nth-child(even):after {
   content: "";
   position: absolute;
@@ -95,6 +97,7 @@
 
 .main .meeting.active {
   background: var(--active-color);
+  z-index: 99;
 }
 
 .meeting.active:hover {
