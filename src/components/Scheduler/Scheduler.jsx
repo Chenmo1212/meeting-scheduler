@@ -20,14 +20,21 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
   const [isMove, setIsMove] = useState(false);
 
   const [unitWidth, setUnitWidth] = useState(0);
-
+  const [unitLabels, setUnitLabels] = useState([]);
   const unitsRef = useRef(null);
 
   useEffect(() => {
     if (unitsRef.current) {
       setUnitWidth(unitsRef.current.getBoundingClientRect().width / units.length);
+      setUnitLabels(getLabels());
     }
   }, [units, unitsRef]);
+
+  const getLabels = () => {
+    let res = units.map((unit, idx) => idx % 2 === 0 ? idx / 2 + ":00" : '')
+    res.push("0:00");
+    return res;
+  }
 
   const onUnitMouseDown = (room, unitIdx) => {
     console.log(`[onUnitMouseDown]: ${room.id}, ${unitIdx}`);
@@ -64,8 +71,8 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
       <div className="unit-label">
         <div className="left"/>
         <div className="labels">
-          {units.map((_, unitIdx) => (
-            <div key={unitIdx} style={{"width": unitWidth + "px"}}>{unitIdx}</div>
+          {unitLabels.map((label, unitIdx) => (
+            <div key={unitIdx} style={{"width": unitWidth + "px"}}>{label}</div>
           ))}
         </div>
       </div>

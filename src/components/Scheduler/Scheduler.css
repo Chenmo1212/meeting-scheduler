@@ -16,6 +16,11 @@
   display: flex;
   width: 100%;
   text-align: center;
+  font-size: 14px;
+}
+
+.labels div {
+  transform: translate(50%, 0);
 }
 
 .room {
@@ -42,10 +47,33 @@
 }
 
 .main .unit {
-  float: left;
   height: 100%;
   min-width: 20px;
-  border-right: 1px solid #ccc;
+  position: relative;
+  background-color: #faf9fa;
+}
+
+.main .unit:nth-child(odd):after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 50%;
+  width: 1px;
+  background: #ccc;
+}
+.main .unit:nth-child(even):after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  width: 1px;
+  background: #ccc;
+}
+
+.main .unit:first-child {
+  border-left: 1px solid #ccc;
 }
 
 .main .unit:hover {
