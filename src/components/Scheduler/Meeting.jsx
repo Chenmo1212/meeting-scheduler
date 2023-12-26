@@ -1,18 +1,17 @@
 import React, {useEffect, useState} from 'react';
 
 const Meeting = ({
-                   height = '100%',
                    units,
                    meeting,
-                   isSelecting,
                    isShow,
-                   isEdit,
+                   editMode,
                    isMove,
                    unitWidth,
                    currRoomId,
                    currUnitIdx,
+                   editInitStartIdx,
                    editInitEndIdx,
-                   setIsEdit,
+                   setEditMode,
                    setIsMove,
                    setCurrRoomId,
                    setEditInitStartIdx,
@@ -31,17 +30,33 @@ const Meeting = ({
   }, [start, end, unitWidth]);
 
   useEffect(() => {
-    if (isEdit) onDragOver();
+    if (editMode) onDragOver();
   }, [currUnitIdx])
 
   const onDragStart = (e) => {
     console.log("[onDragStart]");
-    if (!isEdit && e) {
+    if (!editMode && e) {
       setIsMove(true);
       setOpacity(0.5);
       setStartMouseX(e.clientX);
     }
   }
+
+  const onDragEnd = (e) => {
+    if (isMove && !editMode) {
+      const unitAmount = calcDragUnitAmount(e.clientX);
+      if (meeting.start + unitAmount >= 0 && meeting.end + unitAmount <= units.length) {
+        updateMeeting({
+          id: meeting.id,
+          roomId: currRoomId,
+          start: meeting.start + unitAmount,
+          end: meeting.end + unitAmount,
+        });
+      }
+      setIsMove(false);
+    }
+    setOpacity(1);
+  };
 
   const calcDragUnitAmount = (clientX) => {
     let moveXPx = clientX - startMouseX;
@@ -53,44 +68,51 @@ const Meeting = ({
     return unitAmount;
   }
 
-  const onDragEnd = (e) => {
-    console.log("[onDragEnd]", currRoomId);
-    if (isMove && !isEdit) {
-      let unitAmount = calcDragUnitAmount(e.clientX);
-      if (start + unitAmount >= 0 && end + unitAmount <= units.length) {
-        updateMeeting({
-          id: meeting.id,
-          roomId: currRoomId,
-          start: start + unitAmount,
-          end: end + unitAmount
-        });
-      }
-      setIsMove(false);
-    }
-    setOpacity(1);
-  }
-
   const onDragOver = (e) => {
-    console.log("[onDragOver]");
-    if (!isEdit) return;
+    console.log("[onDragOver]", editMode, e)
+    if (e) e.preventDefault();
 
+    let newStart = start;
+    let newEnd = end;
+
+    if (editMode === 0) return;
+    else if (editMode === 1)
+      newStart = calculateNewStart(e);
+    else if (editMode === 2)
+      newEnd = calculateNewEnd(e);
+
+    updateMeeting({id: meeting.id, start: newStart, end: newEnd});
+  };
+
+  const calculateNewStart = (e) => {
+    let newStart = currUnitIdx;
+    if (e) {
+      let movePx = e.clientX - startMouseX;
+      newStart = editInitStartIdx + parseInt((movePx / unitWidth).toString()) - 1;
+    }
+
+    newStart = newStart < 0 ? 0 : newStart;
+    newStart = newStart > meeting.end - 1 ? meeting.end - 1 : newStart;
+    return newStart;
+  };
+
+  const calculateNewEnd = (e) => {
+    console.log('currUnitIdx', currUnitIdx)
     let newEnd = currUnitIdx;
     if (e) {
       let movePx = e.clientX - startMouseX;
-      newEnd = editInitEndIdx + parseInt(movePx / unitWidth + "") + 1;
+      newEnd = editInitEndIdx + parseInt((movePx / unitWidth).toString());
     }
     newEnd = newEnd > units.length ? units.length : newEnd;
     newEnd = newEnd <= meeting.start + 1 ? meeting.start + 1 : newEnd;
-    updateMeeting({id: meeting.id, end: newEnd});
-  }
+    return newEnd;
+  };
 
   const onEventMouseDown = () => {
-    console.log("[onEventMouseDown]");
     setCurrRoomId(meeting.roomId);
   }
 
   const onEventMouseUp = () => {
-    console.log("[onEventMouseUp]");
     setCurrRoomId(-1);
   }
 
@@ -98,28 +120,31 @@ const Meeting = ({
     console.log("[onEventClick]");
   }
 
-  const editEventStart = (e) => {
-    if (isSelecting) {
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
+  const editStart = (e) => {
+    console.log('[editStart]')
+    setEditMode(1);
+    editEventStart(e);
+  }
 
+  const editEnd = (e) => {
+    console.log("[editEnd]");
+    setEditMode(2);
+    editEventStart(e);
+  }
+  const editEventStart = (e) => {
     console.log("[editEventStart]", e.clientX);
     setStartMouseX(e.clientX);
     setEditInitStartIdx(start);
     setEditInitEndIdx(end);
-    setIsEdit(true);
-    setOpacity(0.5);
+    setOpacity(1);
   }
 
-  const editEventEnd = () => {
+  const resetEditConfig = () => {
     console.log("[editEventEnd]");
-
     setStartMouseX(null);
     setEditInitStartIdx(-1);
     setEditInitEndIdx(-1);
-    setIsEdit(false);
+    setEditMode(0);
     setOpacity(1);
   }
 
@@ -127,25 +152,37 @@ const Meeting = ({
     <div
       className={'meeting'}
       style={{
-        display: isShow ? 'inline-block' : 'none',
-        opacity: opacity,
-        width: width,
-        height: height,
-        left: left
+        display: isShow ? 'inline-block' : 'none', width: width,
+        left: left, opacity: opacity,
+        height: '100%'
       }}
       draggable={true}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
-      onDragOver={onDragOver}
+      onDragOver={(e) => onDragOver(e)}
       onMouseDown={onEventMouseDown}
       onMouseUp={onEventMouseUp}
       onClick={onEventClick}
     >
       <div
-        className="resizable-e"
+        className="resizable-e resizable-left"
         draggable={true}
-        onDragStart={editEventStart}
-        onDragEnd={editEventEnd}
+        onDragStart={editStart}
+        onDragOver={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onDragEnd={resetEditConfig}
+      />
+      <div
+        className="resizable-e resizable-right"
+        draggable={true}
+        onDragStart={editEnd}
+        onDragOver={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onDragEnd={resetEditConfig}
       />
     </div>
   );

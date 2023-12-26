@@ -2,6 +2,22 @@
   width: 100%;
 }
 
+.unit-label {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+.unit-label .left {
+  width: 10%;
+}
+
+.unit-label .labels {
+  display: flex;
+  width: 100%;
+  text-align: center;
+}
+
 .room {
   display: flex;
   gap: 20px;
@@ -22,6 +38,7 @@
 .room .main {
   display: flex;
   position: relative;
+  width: 100%;
 }
 
 .main .unit {
@@ -41,15 +58,29 @@
   background: #e78507;
   cursor: pointer;
   z-index: 10;
+  transition: box-shadow 180ms ease-out;
+  opacity: 0.8;
+}
+
+.meeting:hover {
+  box-shadow: 0 0 0 5px rgba(255, 139, 46, 0.3);
+  opacity: 1.0;
 }
 
 .resizable-e {
   cursor: e-resize;
   width: 10px;
-  right: -5px;
   top: 0;
   height: 100%;
   z-index: 90;
   position: absolute;
   display: block;
+}
+
+.resizable-e.resizable-left {
+  left: -5px;
+}
+
+.resizable-e.resizable-right {
+  right: -5px;
 }

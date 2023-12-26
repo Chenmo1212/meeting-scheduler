@@ -5,16 +5,15 @@ import Meeting from "./Meeting";
 
 
 const onUnitMouseEnter = (roomIdx, unitIdx) => {
-  // console.log(`[onUnitMouseEnter]: ${roomIdx}, ${unitIdx}`)
+  console.log(`[onUnitMouseEnter]: ${roomIdx}, ${unitIdx}`)
 }
 
 const Scheduler = ({rooms, units, meetings, setMeetings}) => {
   const [isSelecting, setSelecting] = useState(false);
-  const [selectingRoomIdx, setSelectingRoomId] = useState(-1);
   const [currRoomId, setCurrRoomId] = useState(-1);
   const [currUnitIdx, setCurrUnitIdx] = useState(-1);
 
-  const [isEdit, setIsEdit] = useState(false);
+  const [editMode, setEditMode] = useState(0);  // todo: 0: unedited, 1: edit start, 2: edit end
   const [editInitStartIdx, setEditInitStartIdx] = useState(-1);
   const [editInitEndIdx, setEditInitEndIdx] = useState(-1);
 
@@ -33,9 +32,9 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
   const onUnitMouseDown = (room, unitIdx) => {
     console.log(`[onUnitMouseDown]: ${room.id}, ${unitIdx}`);
     setSelecting(true);
-    setSelectingRoomId(room.id);
 
     setMeetings([...meetings, {
+      id: meetings.length + 1,
       roomId: room.id,
       start: unitIdx,
       end: unitIdx + 1
@@ -62,6 +61,15 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
 
   return (
     <div className="schedule">
+      <div className="unit-label">
+        <div className="left"/>
+        <div className="labels">
+          {units.map((_, unitIdx) => (
+            <div key={unitIdx} style={{"width": unitWidth + "px"}}>{unitIdx}</div>
+          ))}
+        </div>
+      </div>
+
       {rooms.map((room, roomIdx) => (
         <div className="room" key={roomIdx}>
           <div className="left">{`Room ${roomIdx + 1}`}</div>
@@ -84,7 +92,7 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
                 meeting={meeting}
                 isShow={meeting.roomId === room.id}
                 isSelecting={isSelecting}
-                isEdit={isEdit}
+                editMode={editMode}
                 isMove={isMove}
                 editInitStartIdx={editInitStartIdx}
                 editInitEndIdx={editInitEndIdx}
@@ -92,7 +100,7 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
                 currRoomId={currRoomId}
                 currUnitIdx={currUnitIdx}
                 updateMeeting={updateMeeting}
-                setIsEdit={setIsEdit}
+                setEditMode={setEditMode}
                 setIsMove={setIsMove}
                 setCurrRoomId={setCurrRoomId}
                 setEditInitStartIdx={setEditInitStartIdx}

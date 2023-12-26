@@ -59,7 +59,7 @@ const Home = () => {
   const rooms = [{id: 1}, {id: 2}, {id: 3}]
   const units = Array.from({length: 24}, (_, index) => index + 1);
   const [meetings, setMeetings] = useState([{
-    id: 1, roomId: 1, start: 2, end: 7,
+    id: 1, roomId: 1, start: 5, end: 10,
   }]);
   useEffect(() => {
     console.log('meetings: ', meetings);
