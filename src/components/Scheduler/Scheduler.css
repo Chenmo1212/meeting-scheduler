@@ -28,7 +28,7 @@
   gap: 20px;
   height: 200px;
   width: 100%;
-  border-bottom: 1px solid #000;
+  border-bottom: var(--solid-border);
 }
 
 .room .left {
@@ -50,7 +50,7 @@
   height: 100%;
   min-width: 20px;
   position: relative;
-  background-color: #faf9fa;
+  background-color: #ffffff;
 }
 
 .main .unit:nth-child(odd):after {
@@ -60,7 +60,7 @@
   right: 0;
   height: 50%;
   width: 1px;
-  background: #ccc;
+  background: var(--border-color);
 }
 .main .unit:nth-child(even):after {
   content: "";
@@ -69,11 +69,11 @@
   right: 0;
   height: 100%;
   width: 1px;
-  background: #ccc;
+  background: var(--border-color);
 }
 
 .main .unit:first-child {
-  border-left: 1px solid #ccc;
+  border-left: 1px solid var(--border-color);
 }
 
 .main .unit:hover {
@@ -83,19 +83,26 @@
 .main .meeting {
   position: absolute;
   color: #fff;
-  background: #e78507;
   cursor: pointer;
   z-index: 10;
   transition: box-shadow 180ms ease-out;
   opacity: 0.8;
 }
 
-.meeting:hover {
-  box-shadow: 0 0 0 5px rgba(255, 139, 46, 0.3);
+.main .meeting.occupied {
+  background: var(--ocupied-color);
+}
+
+.main .meeting.active {
+  background: var(--active-color);
+}
+
+.meeting.active:hover {
+  box-shadow: 0 0 0 5px rgba(203, 241, 235);
   opacity: 1.0;
 }
 
-.resizable-e {
+.meeting.active .resizable-e {
   cursor: e-resize;
   width: 10px;
   top: 0;

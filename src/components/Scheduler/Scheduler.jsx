@@ -3,15 +3,10 @@ import './Scheduler.css';
 import Unit from "./Unit";
 import Meeting from "./Meeting";
 
-
-const onUnitMouseEnter = (roomIdx, unitIdx) => {
-  console.log(`[onUnitMouseEnter]: ${roomIdx}, ${unitIdx}`)
-}
-
 const Scheduler = ({rooms, units, meetings, setMeetings}) => {
-  const [isSelecting, setSelecting] = useState(false);
   const [currRoomId, setCurrRoomId] = useState(-1);
   const [currUnitIdx, setCurrUnitIdx] = useState(-1);
+  const [activeMeetingId, setActiveMeetingId] = useState(-1);
 
   const [editMode, setEditMode] = useState(0);  // todo: 0: unedited, 1: edit start, 2: edit end
   const [editInitStartIdx, setEditInitStartIdx] = useState(-1);
@@ -38,19 +33,18 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
 
   const onUnitMouseDown = (room, unitIdx) => {
     console.log(`[onUnitMouseDown]: ${room.id}, ${unitIdx}`);
-    setSelecting(true);
-
     setMeetings([...meetings, {
       id: meetings.length + 1,
       roomId: room.id,
       start: unitIdx,
       end: unitIdx + 1
     }]);
+    setActiveMeetingId(meetings.length + 1);
   }
 
   const onUnitMouseUp = (roomIdx, unitIdx) => {
     console.log(`[onUnitMouseUp]: ${roomIdx}, ${unitIdx}`);
-    setSelecting(false);
+    setActiveMeetingId(-1);
   }
 
   const onUnitDragEnter = (room, unitIdx) => {
@@ -60,6 +54,7 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
   }
 
   const updateMeeting = (meeting) => {
+    console.log("update meeting: ", meeting.id)
     const updatedMeetings = meetings.map(e => {
       return e.id === meeting.id ? {...e, ...meeting} : e;
     });
@@ -86,7 +81,6 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
                 key={unitIdx}
                 width={unitWidth}
                 onUnitMouseDown={() => onUnitMouseDown(room, unitIdx)}
-                onUnitMouseEnter={() => onUnitMouseEnter(room, unitIdx)}
                 onUnitMouseUp={() => onUnitMouseUp(room, unitIdx)}
                 onUnitDragEnter={() => onUnitDragEnter(room, unitIdx)}
               />
@@ -98,7 +92,7 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
                 units={units}
                 meeting={meeting}
                 isShow={meeting.roomId === room.id}
-                isSelecting={isSelecting}
+                isActive={activeMeetingId === meeting.id}
                 editMode={editMode}
                 isMove={isMove}
                 editInitStartIdx={editInitStartIdx}
@@ -110,6 +104,7 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
                 setEditMode={setEditMode}
                 setIsMove={setIsMove}
                 setCurrRoomId={setCurrRoomId}
+                setActiveMeetingId={setActiveMeetingId}
                 setEditInitStartIdx={setEditInitStartIdx}
                 setEditInitEndIdx={setEditInitEndIdx}
               />

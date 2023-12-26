@@ -4,10 +4,10 @@
   --content-bg-color: #ffffff;
   --text-color: #191919;
   --border-color: #e8e8e8;
-  --primary-color: #0057ff;
-  --primary-active-color: #003ecb;
-  --ocupied-color: #ffcaba;
-  --selecting-color: #ddf3dd;
+  --primary-color: #1fa8f5;
+  --primary-active-color: #0da9ff;
+  --ocupied-color: #8d7de0;
+  --active-color: #31d0bd;
 
   /* Font Size */
   --text-size: 16px;

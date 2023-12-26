@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 const Meeting = ({
                    units,
                    meeting,
+                   isActive,
                    isShow,
                    editMode,
                    isMove,
@@ -14,6 +15,7 @@ const Meeting = ({
                    setEditMode,
                    setIsMove,
                    setCurrRoomId,
+                   setActiveMeetingId,
                    setEditInitStartIdx,
                    setEditInitEndIdx,
                    updateMeeting
@@ -34,7 +36,7 @@ const Meeting = ({
   }, [currUnitIdx])
 
   const onDragStart = (e) => {
-    console.log("[onDragStart]");
+    if (!isActive) return;
     if (!editMode && e) {
       setIsMove(true);
       setOpacity(0.5);
@@ -43,6 +45,7 @@ const Meeting = ({
   }
 
   const onDragEnd = (e) => {
+    if (!isActive) return;
     if (isMove && !editMode) {
       const unitAmount = calcDragUnitAmount(e.clientX);
       if (meeting.start + unitAmount >= 0 && meeting.end + unitAmount <= units.length) {
@@ -70,6 +73,7 @@ const Meeting = ({
 
   const onDragOver = (e) => {
     console.log("[onDragOver]", editMode, e)
+    if (!isActive) return
     if (e) e.preventDefault();
 
     let newStart = start;
@@ -97,12 +101,12 @@ const Meeting = ({
   };
 
   const calculateNewEnd = (e) => {
-    console.log('currUnitIdx', currUnitIdx)
     let newEnd = currUnitIdx;
     if (e) {
       let movePx = e.clientX - startMouseX;
       newEnd = editInitEndIdx + parseInt((movePx / unitWidth).toString());
     }
+
     newEnd = newEnd > units.length ? units.length : newEnd;
     newEnd = newEnd <= meeting.start + 1 ? meeting.start + 1 : newEnd;
     return newEnd;
@@ -118,6 +122,7 @@ const Meeting = ({
 
   const onEventClick = () => {
     console.log("[onEventClick]");
+    setActiveMeetingId(meeting.id);
   }
 
   const editStart = (e) => {
@@ -132,7 +137,6 @@ const Meeting = ({
     editEventStart(e);
   }
   const editEventStart = (e) => {
-    console.log("[editEventStart]", e.clientX);
     setStartMouseX(e.clientX);
     setEditInitStartIdx(start);
     setEditInitEndIdx(end);
@@ -140,7 +144,6 @@ const Meeting = ({
   }
 
   const resetEditConfig = () => {
-    console.log("[editEventEnd]");
     setStartMouseX(null);
     setEditInitStartIdx(-1);
     setEditInitEndIdx(-1);
@@ -148,9 +151,16 @@ const Meeting = ({
     setOpacity(1);
   }
 
+  const getMeetingStatus = () => {
+    let className = "meeting "
+    if (isActive) className += "active"
+    else if (isShow) className += "occupied"
+    return className
+  }
+
   return (
     <div
-      className={'meeting'}
+      className={getMeetingStatus()}
       style={{
         display: isShow ? 'inline-block' : 'none', width: width,
         left: left, opacity: opacity,
@@ -164,6 +174,7 @@ const Meeting = ({
       onMouseUp={onEventMouseUp}
       onClick={onEventClick}
     >
+      {meeting.id}
       <div
         className="resizable-e resizable-left"
         draggable={true}
