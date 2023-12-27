@@ -50,15 +50,20 @@ const Meeting = ({
     if (!isActive) return;
     if (isMove && !editMode) {
       const unitAmount = calcDragUnitAmount(e.clientX);
-      const updatedMeeting = {
-        id: meeting.id,
-        roomId: currRoomId,
-        start: meeting.start + unitAmount,
-        end: meeting.end + unitAmount
-      }
 
-      const isOverlap = isOverlapWithExistingMeetings(updatedMeeting)
-      if (!isOverlap) updateMeeting(updatedMeeting);
+      let newStart = meeting.start + unitAmount;
+      let newEnd = meeting.end + unitAmount;
+      if (newStart >= 0 && newEnd <= units.length) {
+        const updatedMeeting = {
+          id: meeting.id,
+          roomId: currRoomId,
+          start: newStart,
+          end: newEnd
+        }
+
+        const isOverlap = isOverlapWithExistingMeetings(updatedMeeting)
+        if (!isOverlap) updateMeeting(updatedMeeting);
+      }
       setIsMove(false);
     }
     setOpacity(1);
