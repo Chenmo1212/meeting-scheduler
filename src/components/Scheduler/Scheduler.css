@@ -27,18 +27,18 @@
 .room {
   display: flex;
   gap: 20px;
-  height: 200px;
+  height: 60px;
   width: 100%;
-  border-bottom: var(--solid-border);
+  margin-bottom: 20px;
 }
 
 .room .left {
-  background-color: #557ba5;
   width: 10%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  border: 2px solid #eff0f3;
+  border-radius: 5px;
 }
 
 .room .main {
@@ -51,7 +51,7 @@
   height: 100%;
   min-width: 20px;
   position: relative;
-  background-color: #ffffff;
+  border-bottom: var(--solid-border);
 }
 
 .main .unit:nth-child(odd):after {
@@ -84,24 +84,28 @@
 
 .main .meeting {
   position: absolute;
-  color: #fff;
+  color: var(--text-color);
   cursor: pointer;
   z-index: 10;
   transition: box-shadow 180ms ease-out;
   opacity: 0.8;
+  border-radius: 5px;
 }
 
 .main .meeting.occupied {
   background: var(--ocupied-color);
+  border: 1px solid var(--ocupied-border-color);
 }
 
 .main .meeting.active {
   background: var(--active-color);
+  border: 1px solid var(--active-border-color);
+  box-shadow: var(--light-shadow);
   z-index: 99;
 }
 
 .meeting.active:hover {
-  box-shadow: 0 0 0 5px rgba(203, 241, 235);
+  box-shadow: 0 0 0 5px #ccdcff;
   opacity: 1.0;
 }
 

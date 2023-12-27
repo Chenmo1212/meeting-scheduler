@@ -6,8 +6,12 @@
   --border-color: #e8e8e8;
   --primary-color: #1fa8f5;
   --primary-active-color: #0da9ff;
-  --ocupied-color: #8d7de0;
-  --active-color: #31d0bd;
+  --ocupied-color: #eaf7f1;
+  --ocupied-border-color: #a1d8bf;
+  --active-color: #e7effe;
+  --active-border-color: #9bb9ef;
+  --unavailable-color: #fdf3e6;
+  --unavailable-border-color: #e6ceaf;
 
   /* Font Size */
   --text-size: 16px;
@@ -22,6 +26,7 @@
 
   /* Box Shadow */
   --box-shadow: 0 1px 2px rgba(0, 0, 0, .16);
+  --light-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 
 html, body {
