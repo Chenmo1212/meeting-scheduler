@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import {message} from "antd"
+import {UNEDITED, EDITED, EDITING} from './const'
 
 const Meeting = ({
                    units,
@@ -27,6 +29,7 @@ const Meeting = ({
   const [left, setLeftOffset] = useState('0px');
   const [startMouseX, setStartMouseX] = useState(null);
   const {start, end} = meeting;
+  const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
     setWidth((end - start) * unitWidth + "px");
@@ -36,6 +39,13 @@ const Meeting = ({
   useEffect(() => {
     if (editMode) onDragOver();
   }, [currUnitIdx])
+
+  const displayWarningMessage = (msg) => {
+    messageApi.open({
+      type: 'warning',
+      content: msg,
+    });
+  }
 
   const onDragStart = (e) => {
     if (!isActive) return;
@@ -63,6 +73,7 @@ const Meeting = ({
 
         const isOverlap = isOverlapWithExistingMeetings(updatedMeeting)
         if (!isOverlap) updateMeeting(updatedMeeting);
+        else displayWarningMessage("Meeting overlaps with existing meetings")
       }
       setIsMove(false);
     }
@@ -80,17 +91,16 @@ const Meeting = ({
   }
 
   const onDragOver = (e) => {
-    console.log("[onDragOver]", editMode, e)
     if (!isActive) return
     if (e) e.preventDefault();
 
     let newStart = start;
     let newEnd = end;
 
-    if (editMode === 0) return;
-    else if (editMode === 1)
+    if (editMode === UNEDITED) return;
+    else if (editMode === EDITING)
       newStart = calculateNewStart(e);
-    else if (editMode === 2)
+    else if (editMode === EDITED)
       newEnd = calculateNewEnd(e);
 
     updateMeeting({id: meeting.id, start: newStart, end: newEnd});
@@ -131,18 +141,15 @@ const Meeting = ({
   }
 
   const onEventClick = () => {
-    console.log("[onEventClick]");
     setActiveMeetingId(meeting.id);
   }
 
   const editStart = (e) => {
-    console.log('[editStart]')
     setEditMode(1);
     editEventStart(e);
   }
 
   const editEnd = (e) => {
-    console.log("[editEnd]");
     setEditMode(2);
     editEventStart(e);
   }
@@ -184,6 +191,7 @@ const Meeting = ({
       onMouseUp={onEventMouseUp}
       onClick={onEventClick}
     >
+      {contextHolder}
       {meeting.id}
       <div
         className="resizable-e resizable-left"

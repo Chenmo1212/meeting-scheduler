@@ -2,13 +2,14 @@ import React, {useEffect, useRef, useState} from 'react';
 import './Scheduler.css';
 import Unit from "./Unit";
 import Meeting from "./Meeting";
+import {UNEDITED} from "./const"
 
 const Scheduler = ({rooms, units, meetings, setMeetings}) => {
   const [currRoomId, setCurrRoomId] = useState(-1);
   const [currUnitIdx, setCurrUnitIdx] = useState(-1);
   const [activeMeetingId, setActiveMeetingId] = useState(-1);
 
-  const [editMode, setEditMode] = useState(0);  // todo: 0: unedited, 1: edit start, 2: edit end
+  const [editMode, setEditMode] = useState(UNEDITED);
   const [editInitStartIdx, setEditInitStartIdx] = useState(-1);
   const [editInitEndIdx, setEditInitEndIdx] = useState(-1);
 
@@ -32,7 +33,6 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
   }
 
   const onUnitMouseDown = (room, unitIdx) => {
-    console.log(`[onUnitMouseDown]: ${room.id}, ${unitIdx}`);
     setMeetings([...meetings, {
       id: meetings.length + 1,
       roomId: room.id,
@@ -43,7 +43,6 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
   }
 
   const onUnitMouseUp = (roomIdx, unitIdx) => {
-    console.log(`[onUnitMouseUp]: ${roomIdx}, ${unitIdx}`);
     setActiveMeetingId(-1);
   }
 
@@ -53,7 +52,6 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
   }
 
   const updateMeeting = (meeting) => {
-    console.log("update meeting: ", meeting.id)
     const updatedMeetings = meetings.map(e => {
       return e.id === meeting.id ? {...e, ...meeting} : e;
     });
