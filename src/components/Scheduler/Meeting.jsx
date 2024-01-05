@@ -6,7 +6,7 @@ const Meeting = ({
                    units,
                    meeting,
                    isActive,
-                   isShow,
+                   isOccupied,
                    editMode,
                    isMove,
                    unitWidth,
@@ -24,17 +24,23 @@ const Meeting = ({
                    setEditInitEndIdx,
                    updateMeeting
                  }) => {
-  const [opacity, setOpacity] = useState(1);
-  const [width, setWidth] = useState('0');
-  const [left, setLeftOffset] = useState('0px');
+  const [style, setStyle] = useState({
+    opacity: 1,
+    width: '0',
+    left: '0px',
+  });
   const [startMouseX, setStartMouseX] = useState(null);
-  const {start, end} = meeting;
+  const { start, end } = meeting;
   const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
-    setWidth((end - start) * unitWidth + "px");
-    setLeftOffset(start * unitWidth + "px");
+    setStyle({
+      ...style,
+      width: `${(end - start) * unitWidth}px`,
+      left: `${start * unitWidth}px`,
+    });
   }, [start, end, unitWidth]);
+
 
   useEffect(() => {
     if (editMode) onDragOver();
@@ -51,7 +57,8 @@ const Meeting = ({
     if (!isActive) return;
     if (!editMode && e) {
       setIsMove(true);
-      setOpacity(0.5);
+      // setOpacity(0.5);
+      setStyle({...style, opacity: 0.5})
       setStartMouseX(e.clientX);
     }
   }
@@ -77,7 +84,7 @@ const Meeting = ({
       }
       setIsMove(false);
     }
-    setOpacity(1);
+    setStyle({...style, opacity: 1})
   };
 
   const calcDragUnitAmount = (clientX) => {
@@ -145,44 +152,40 @@ const Meeting = ({
   }
 
   const editStart = (e) => {
-    setEditMode(1);
+    setEditMode(EDITING);
     editEventStart(e);
   }
 
   const editEnd = (e) => {
-    setEditMode(2);
+    setEditMode(EDITED);
     editEventStart(e);
   }
   const editEventStart = (e) => {
     setStartMouseX(e.clientX);
     setEditInitStartIdx(start);
     setEditInitEndIdx(end);
-    setOpacity(1);
+    setStyle({...style, opacity: 1})
   }
 
   const resetEditConfig = () => {
     setStartMouseX(null);
     setEditInitStartIdx(-1);
     setEditInitEndIdx(-1);
-    setEditMode(0);
-    setOpacity(1);
+    setEditMode(UNEDITED);
+    setStyle({...style, opacity: 1})
   }
 
   const getMeetingStatus = () => {
     let className = "meeting "
     if (isActive) className += "active"
-    else if (isShow) className += "occupied"
+    else if (isOccupied) className += "occupied"
     return className
   }
 
   return (
     <div
       className={getMeetingStatus()}
-      style={{
-        display: isShow ? 'inline-block' : 'none', width: width,
-        left: left, opacity: opacity,
-        height: '100%'
-      }}
+      style={{ display: isOccupied ? 'inline-block' : 'none', ...style }}
       draggable={isActive}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
