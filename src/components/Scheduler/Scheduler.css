@@ -83,6 +83,7 @@
 }
 
 .main .meeting {
+  height: 100%;
   position: absolute;
   color: var(--text-color);
   cursor: pointer;

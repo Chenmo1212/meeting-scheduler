@@ -27,19 +27,21 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
   }, [units, unitsRef]);
 
   const getLabels = () => {
-    let res = units.map((unit, idx) => idx % 2 === 0 ? idx / 2 + ":00" : '')
+    let res = units.map((unit, idx) => (idx % 2 === 0 ? `${idx / 2}:00` : ''));
     res.push("0:00");
     return res;
   }
 
   const onUnitMouseDown = (room, unitIdx) => {
-    setMeetings([...meetings, {
+    const newMeeting = {
       id: meetings.length + 1,
       roomId: room.id,
       start: unitIdx,
-      end: unitIdx + 1
-    }]);
-    setActiveMeetingId(meetings.length + 1);
+      end: unitIdx + 1,
+    };
+
+    setMeetings([...meetings, newMeeting]);
+    setActiveMeetingId(newMeeting.id);
   }
 
   const onUnitMouseUp = (roomIdx, unitIdx) => {
@@ -51,10 +53,10 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
     setCurrUnitIdx(unitIdx);
   }
 
-  const updateMeeting = (meeting) => {
-    const updatedMeetings = meetings.map(e => {
-      return e.id === meeting.id ? {...e, ...meeting} : e;
-    });
+  const updateMeeting = (updatedMeeting) => {
+    const updatedMeetings = meetings.map((meeting) =>
+      meeting.id === updatedMeeting.id ? {...meeting, ...updatedMeeting} : meeting
+    );
     setMeetings(updatedMeetings);
   }
 
@@ -62,6 +64,7 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
     const filteredMeetings = meetings.filter(e => e.roomId === meeting.roomId);
     const sortedMeetings = filteredMeetings.slice().sort((a, b) => a.start - b.start);
     const index = sortedMeetings.findIndex(m => m.id === meeting.id);
+
     if (index === -1) return {start: 0, end: units.length - 1}
 
     const previousMeeting = sortedMeetings[index - 1];
@@ -75,13 +78,14 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
 
   const isOverlapWithExistingMeetings = (newMeeting) => {
     const {id, roomId, start, end} = newMeeting;
-    const filteredMeetings = meetings.filter(meeting => meeting.roomId === roomId && meeting.id !== id);
-    for (const meeting of filteredMeetings) {
-      if (start < meeting.end && end > meeting.start) {
-        return true;
-      }
-    }
-    return false;
+
+    return meetings.some(
+      (meeting) =>
+        meeting.roomId === roomId &&
+        meeting.id !== id &&
+        start < meeting.end &&
+        end > meeting.start
+    );
   };
 
   return (
@@ -90,7 +94,9 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
         <div className="left"/>
         <div className="labels">
           {unitLabels.map((label, unitIdx) => (
-            <div key={unitIdx} style={{"width": unitWidth + "px"}}>{label}</div>
+            <div key={unitIdx} style={{width: `${unitWidth}px`}}>
+              {label}
+            </div>
           ))}
         </div>
       </div>
@@ -104,36 +110,40 @@ const Scheduler = ({rooms, units, meetings, setMeetings}) => {
                 key={unitIdx}
                 width={unitWidth}
                 onUnitMouseDown={() => onUnitMouseDown(room, unitIdx)}
-                onUnitMouseUp={() => onUnitMouseUp(room, unitIdx)}
+                onUnitMouseUp={() => onUnitMouseUp(roomIdx, unitIdx)}
                 onUnitDragEnter={() => onUnitDragEnter(room, unitIdx)}
               />
             ))}
 
-            {meetings.map((meeting, meetingIdx) => (
-              <Meeting
-                key={meetingIdx}
-                units={units}
-                meeting={meeting}
-                isShow={meeting.roomId === room.id}
-                isActive={activeMeetingId === meeting.id}
-                editMode={editMode}
-                isMove={isMove}
-                editInitStartIdx={editInitStartIdx}
-                editInitEndIdx={editInitEndIdx}
-                unitWidth={unitWidth}
-                currRoomId={currRoomId}
-                currUnitIdx={currUnitIdx}
-                updateMeeting={updateMeeting}
-                isOverlapWithExistingMeetings={(newMeeting) => isOverlapWithExistingMeetings(newMeeting)}
-                getEditingTimeRange={() => getEditingTimeRange(meeting)}
-                setEditMode={setEditMode}
-                setIsMove={setIsMove}
-                setCurrRoomId={setCurrRoomId}
-                setActiveMeetingId={setActiveMeetingId}
-                setEditInitStartIdx={setEditInitStartIdx}
-                setEditInitEndIdx={setEditInitEndIdx}
-              />
-            ))}
+            {meetings
+              .filter((meeting) => meeting.roomId === room.id)
+              .map((meeting, meetingIdx) => (
+                <Meeting
+                  key={meetingIdx}
+                  units={units}
+                  meeting={meeting}
+                  isOccupied={meeting.roomId === room.id}
+                  isActive={activeMeetingId === meeting.id}
+                  editMode={editMode}
+                  isMove={isMove}
+                  editInitStartIdx={editInitStartIdx}
+                  editInitEndIdx={editInitEndIdx}
+                  unitWidth={unitWidth}
+                  currRoomId={currRoomId}
+                  currUnitIdx={currUnitIdx}
+                  updateMeeting={updateMeeting}
+                  isOverlapWithExistingMeetings={(newMeeting) =>
+                    isOverlapWithExistingMeetings(newMeeting)
+                  }
+                  getEditingTimeRange={() => getEditingTimeRange(meeting)}
+                  setEditMode={setEditMode}
+                  setIsMove={setIsMove}
+                  setCurrRoomId={setCurrRoomId}
+                  setActiveMeetingId={setActiveMeetingId}
+                  setEditInitStartIdx={setEditInitStartIdx}
+                  setEditInitEndIdx={setEditInitEndIdx}
+                />
+              ))}
           </div>
         </div>
       ))}

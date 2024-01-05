@@ -1,13 +1,13 @@
 import './App.css';
 import Header from './components/Header/Header';
-import Home from './pages/Home/Home';
+import MeetingRoomBooking from './pages/MeetingRoomBookingPage/MeetingRoomBooking';
 
 function App() {
   return (
       <div className="App">
         <Header />
         <main>
-          <Home />
+          <MeetingRoomBooking />
         </main>
       </div>
   );
