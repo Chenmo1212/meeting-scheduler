@@ -1,0 +1,129 @@
+.schedule {
+  width: 100%;
+}
+
+.unit-label {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+.unit-label .left {
+  width: 10%;
+}
+
+.unit-label .labels {
+  display: flex;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.labels div {
+  transform: translate(50%, 0);
+}
+
+.room {
+  display: flex;
+  gap: 20px;
+  height: 60px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.room .left {
+  width: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #eff0f3;
+  border-radius: 5px;
+}
+
+.room .main {
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.main .unit {
+  height: 100%;
+  min-width: 20px;
+  position: relative;
+  border-bottom: var(--solid-border);
+}
+
+.main .unit:nth-child(odd):after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 50%;
+  width: 1px;
+  background: var(--border-color);
+}
+
+.main .unit:nth-child(even):after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  width: 1px;
+  background: var(--border-color);
+}
+
+.main .unit:first-child {
+  border-left: 1px solid var(--border-color);
+}
+
+.main .unit:hover {
+  background-color: #f0f0f0;
+}
+
+.main .meeting {
+  height: 100%;
+  position: absolute;
+  color: var(--text-color);
+  cursor: pointer;
+  z-index: 10;
+  transition: box-shadow 180ms ease-out;
+  opacity: 0.8;
+  border-radius: 5px;
+}
+
+.main .meeting.occupied {
+  background: var(--ocupied-color);
+  border: 1px solid var(--ocupied-border-color);
+}
+
+.main .meeting.active {
+  background: var(--active-color);
+  border: 1px solid var(--active-border-color);
+  box-shadow: var(--light-shadow);
+  z-index: 99;
+}
+
+.meeting.active:hover {
+  box-shadow: 0 0 0 5px #ccdcff;
+  opacity: 1.0;
+}
+
+.meeting.active .resizable-e {
+  cursor: e-resize;
+  width: 10px;
+  top: 0;
+  height: 100%;
+  z-index: 90;
+  position: absolute;
+  display: block;
+}
+
+.resizable-e.resizable-left {
+  left: -5px;
+}
+
+.resizable-e.resizable-right {
+  right: -5px;
+}

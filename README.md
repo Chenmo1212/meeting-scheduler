@@ -1,70 +1,101 @@
-# Getting Started with Create React App
+# React Meeting Scheduler
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<p>
+    <a href="https://github.com/Chenmo1212/meeting-booking-component" target="_blank">
+        <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Chenmo1212/meeting-booking-component">
+    </a>
+    <a href="https://github.com/Chenmo1212/meeting-booking-component/issues" target="_blank">
+        <img alt="Issues" src="https://img.shields.io/github/issues/Chenmo1212/meeting-booking-component" />
+    </a>
+    <a href="https://github.com/Chenmo1212/meeting-booking-component/pulls" target="_blank">
+        <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/Chenmo1212/meeting-booking-component" />
+    </a>
+    <a href="/"><img src="https://komarev.com/ghpvc/?username=chenmo1212-meeting-booking-component&label=Visitors&base=200" alt="Visitor" /></a>
+    <a href="https://github.com/Chenmo1212/meeting-booking-component" target="_blank">
+        <img alt="GitHub" src="https://img.shields.io/github/license/Chenmo1212/meeting-booking-component">
+    </a>
+<br/>
+<br/>
+    <a href="https://github.com/Chenmo1212/meeting-booking-component" target="_blank">
+        <img alt="GitHub followers" src="https://img.shields.io/github/followers/pudongping?style=social">
+    </a>
+    <a href="https://github.com/Chenmo1212/meeting-booking-component" target="_blank">
+        <img alt="GitHub forks" src="https://img.shields.io/github/forks/Chenmo1212/meeting-booking-component?style=social">
+    </a>
+    <a href="https://github.com/Chenmo1212/meeting-booking-component" target="_blank">
+        <img alt="GitHub stars" src="https://img.shields.io/github/stars/Chenmo1212/meeting-booking-component?style=social">
+    </a>
+    <a href="https://github.com/Chenmo1212/meeting-booking-component" target="_blank">
+        <img alt="GitHub watchers" src="https://img.shields.io/github/watchers/Chenmo1212/meeting-booking-component?style=social">
+    </a>
+</p>
 
-## Available Scripts
+![Snipaste_2024-01-06_08-02-52.png](images%2FSnipaste_2024-01-06_08-02-52.png)
 
-In the project directory, you can run:
+A simple React application for scheduling and managing meetings in different rooms.
 
-### `npm start`
+Online demo: [demo](https://chenmo1212.cn/meeting-room)
+## Overview
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+This React Meeting Scheduler application allows users to schedule and manage meetings within various rooms. It provides an interactive interface for adding, dragging, and resizing meetings on a timeline.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Features
 
-### `npm test`
+- **Room Management:** Define different rooms for scheduling meetings.
+- **Timeline View:** Visualize meetings on a timeline for each room.
+- **Meeting Interaction:** Drag and drop meetings, resize them, and interact with the timeline.
+- **Visual Feedback:** Meetings are color-coded and provide visual feedback based on their status.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Components
 
-### `npm run build`
+### 1. Scheduler Component
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The main component that integrates room, unit, and meeting components to create a cohesive scheduling view.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 2. Meeting Component
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Handles the display, interaction, and editing of individual meetings on the timeline.
 
-### `npm run eject`
+### 3. Unit Component
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Represents the time units on the timeline where meetings can be scheduled.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Getting Started
+1. Clone the repository:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   ```cmd
+   git clone https://github.com/Chenmo1212/meeting-booking-component.git
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. Navigate to the project directory:
 
-## Learn More
+   ```cmd
+   cd react-meeting-scheduler
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+3. Install dependencies:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   ```cmd 
+   npm install
+   ```
 
-### Code Splitting
+4. Start the development server:
+   ```cmd
+   npm start
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+5. Open the application in your browser
 
-### Analyzing the Bundle Size
+    http://localhost:3000
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Usage
 
-### Making a Progressive Web App
+- **Adding Meetings**: Click on a unit in the timeline to add a meeting for the selected room.
+- **Moving Meetings**: Drag meetings to reschedule them within the timeline.
+- **Resizing Meetings**: Drag the edges of meetings to adjust their duration.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Contributing
+Contributions are welcome! Please feel free to submit a pull request or open an issue if you find a bug or have a suggestion for a new feature.
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+This project is licensed under the MIT License.

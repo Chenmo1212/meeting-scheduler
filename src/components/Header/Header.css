@@ -1,0 +1,12 @@
+.header {
+  height: 59px;
+  line-height: 60px;
+  padding-left: 20px;
+  background-color: var(--content-bg-color);
+  border-bottom: var(--solid-border);
+}
+
+.header .header-title {
+  margin: 0;
+  font-size: var(--text-size-xl);
+}
