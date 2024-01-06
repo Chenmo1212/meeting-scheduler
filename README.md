@@ -34,6 +34,7 @@
 
 A simple React application for scheduling and managing meetings in different rooms.
 
+Online demo: [demo](https://chenmo1212.cn/meeting-room)
 ## Overview
 
 This React Meeting Scheduler application allows users to schedule and manage meetings within various rooms. It provides an interactive interface for adding, dragging, and resizing meetings on a timeline.
